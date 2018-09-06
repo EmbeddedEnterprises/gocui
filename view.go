@@ -206,13 +206,15 @@ func (v *View) Write(p []byte) (n int, err error) {
 		switch ch {
 		case '\n':
 			v.lines = append(v.lines, nil)
-		case '\r':
-			nl := len(v.lines)
-			if nl > 0 {
-				v.lines[nl-1] = nil
-			} else {
-				v.lines = make([][]cell, 1)
-			}
+		case '\r': // Ignore \r, since it's handled wrong.
+		// Correct handling would require us to move the virtual cursor, but we have no such concept.
+		/*case '\r':
+		nl := len(v.lines)
+		if nl > 0 {
+			v.lines[nl-1] = nil
+		} else {
+			v.lines = make([][]cell, 1)
+		}*/
 		default:
 			cells := v.parseInput(ch)
 			if cells == nil {
